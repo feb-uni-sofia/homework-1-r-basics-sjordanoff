@@ -22,7 +22,12 @@ xmin[xmin<avgxmin]
 xmin>avgxmin
 xmin[xmin>avgxmin]
 
+## Incorrect subsetting. Correct is:
+xmin[xmax > avgxmax]
+
 #f
+## Nice
+
 dayNames <- c('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
 names(xmin) <- dayNames
 str(xmin)
@@ -37,10 +42,16 @@ dim(temperatures)
 temperatures
 
 #h
-xminFahrenheit <- c(((9/5)*xmin)+32) #Fahrenheit
+## Superfluous 'c'
+xminFahrenheit <- (9/5)*xmin + 32 #Fahrenheit
 xminFahrenheit
+
+## This works but is hard to read.
 cbind(temperatures, xminFahrenheit) -> temperatures
 temperatures
+
+## Better:
+temperatures <- cbind(temperatures, xminFahrenheit)
 
 #i
 fahrenheit <- data.frame (df.xminFahrenheit = xminFahrenheit)
@@ -55,4 +66,19 @@ fivefahrenheit
 MonFriFahrenheit2 <- xminFahrenheit[-c(6,7)]
 fivefahrenheit2 <- data.frame (df.MonFriFahrenheit2 = MonFriFahrenheit2)
 fivefahrenheit2
+
+## Easier:
+
+temperatures <- within(temperatures, {
+  xminFahrenheit <- xmin * (9/5) + 32
+  xmaxFahrenheit <- xmax * (9/5) + 32
+})
+
+temperaturesFahrenheit <- temeratures[, c('xminFahrenheit', 'xmaxFahrenheit)]
+
+## Easier to subset the whole data.frame instead of 
+## doing this for each vector used in its construction
+
+temperaturesFahrenheit[1:5, ]
+temperaturesFahrenheit[-(6:7), ]
 

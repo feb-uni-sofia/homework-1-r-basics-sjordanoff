@@ -7,6 +7,9 @@ y <- c(1,4)
 #c
 x-y
 #subtraction is performed elementwise and if two vectors are of unequal length
+
+## Missing explanation.
+
 #d 
 s <- c(x,y)
 
